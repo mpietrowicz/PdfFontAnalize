@@ -19,7 +19,7 @@ jobs:
     - name: Build the Docker image AnalysisOfAspose
       run: |
         TAG=$(date +%s)
-        docker build . --file AnalysisOfAspose/Dockerfile --tag analysis_of_aspose: $TAG
+        docker build . --file AnalysisOfAspose/Dockerfile --tag analysis_of_aspose:$TAG
         echo "IMAGE_TAG=$TAG" >> $GITHUB_ENV
     - name: Run console application
       run: docker run --rm -v "/data:/data" analysis_of_aspose:${{ env.IMAGE_TAG }} .
