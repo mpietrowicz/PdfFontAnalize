@@ -31,5 +31,8 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\CommonDocxStateAnalyze\CommonDocxStateAnalyze.csproj" />
+    </ItemGroup>
 
 </Project>

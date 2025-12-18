@@ -19,7 +19,18 @@ else
 worker.SetOutputFolder(outputFolderLinux);
 
 Console.WriteLine("--------------------------------------------------");
-Console.WriteLine("-----KONWERSJA BEZ DODATKOWYCH CZCIONEK-----------");
+Console.WriteLine("-------------DOCX LISTA CZCIONEK/FONTS------------");
+Console.WriteLine("--------------------------------------------------");
+
+var fonts = CommonDocxStateAnalyze.AnalyzeFonts.GetUsedFonts("DocxFiles/TestCzcionek.docx");
+Console.WriteLine("Fonts used in the document:");
+foreach (var font in fonts)
+{
+    Console.WriteLine($"- {font}");
+}
+
+Console.WriteLine("--------------------------------------------------");
+Console.WriteLine("-----KONWERSJA BEZ DODATKOWYCH CZCIONEK/FONTS-----");
 Console.WriteLine("--------------------------------------------------");
 
 Console.WriteLine("Converting document without additional fonts...");
@@ -27,7 +38,7 @@ string v = await worker.ConvertToPdf("DocxFiles/TestCzcionek.docx","nofonts");
 Console.WriteLine($"Converted file path: {v}");
 
 Console.WriteLine("--------------------------------------------------");
-Console.WriteLine("-----KONWERSJA Z DODATKOWYMI CZCIONKAMI-----------");
+Console.WriteLine("-----KONWERSJA Z DODATKOWYMI CZCIONKAMI/FONTS-----");
 Console.WriteLine("--------------------------------------------------");
 //var windowsFontsDir = Environment.GetFolderPath(Environment.SpecialFolder.Fonts);
 
