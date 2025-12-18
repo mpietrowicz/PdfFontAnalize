@@ -21,10 +21,16 @@ RUN printf '%s\n' \
 
 COPY ["AnalysisOfAspose/AnalysisOfAspose.csproj", "AnalysisOfAspose/"]
 COPY ["CommonDocxStateAnalyze/CommonDocxStateAnalyze.csproj", "CommonDocxStateAnalyze/"]
+COPY ["AnalysisOfAspose.Tests/AnalysisOfAspose.Tests.csproj", "AnalysisOfAspose.Tests/"]
 RUN dotnet restore "AnalysisOfAspose/AnalysisOfAspose.csproj" --configfile /src/NuGet.Config
+RUN dotnet restore "AnalysisOfAspose.Tests/AnalysisOfAspose.Tests.csproj" --configfile /src/NuGet.Config
 COPY . .
 WORKDIR "/src/AnalysisOfAspose"
 RUN dotnet build "./AnalysisOfAspose.csproj" -c $BUILD_CONFIGURATION -o /app/build --configfile /src/NuGet.Config
+WORKDIR "/src/AnalysisOfAspose.Tests"
+RUN dotnet test "./AnalysisOfAspose.Tests.csproj" -c $BUILD_CONFIGURATION --no-restore --verbosity normal
+
+WORKDIR "/src/AnalysisOfAspose"
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
