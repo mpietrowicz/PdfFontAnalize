@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install fontconfig
+      run: sudo apt-get update && sudo apt-get install -y fontconfig libfontconfig1
     - uses: actions/checkout@v4
     - name: Build the Docker image AnalysisOfAspose
       run: docker build . --file AnalysisOfAspose/Dockerfile --tag analysis_of_aspose:$(date +%s)
