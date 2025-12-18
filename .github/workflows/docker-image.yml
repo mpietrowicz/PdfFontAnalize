@@ -19,4 +19,4 @@ jobs:
     - name: Build the Docker image AnalysisOfAspose
       run: docker build . --file AnalysisOfAspose/Dockerfile --tag analysis_of_aspose:$(date +%s)
     - name: Run console application
-      run: docker run --rm analysis_of_aspose:latest
+      run: docker run --rm -v "/data:/data" analysis_of_aspose:latest .
