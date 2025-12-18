@@ -9,12 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Aspose.Words" Version="25.12.0" />
         <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.8" />
     </ItemGroup>
@@ -33,6 +27,14 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\CommonDocxStateAnalyze\CommonDocxStateAnalyze.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+      <Content Include="..\StartDocker.Bat">
+        <Link>StartDocker.Bat</Link>
+      </Content>
     </ItemGroup>
 
 </Project>
