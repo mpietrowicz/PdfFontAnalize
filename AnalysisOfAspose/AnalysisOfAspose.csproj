@@ -14,4 +14,22 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Aspose.Words" Version="25.12.0" />
+        <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.8" />
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="DocxFiles\" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="DocxFiles\*.*">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="Fonts\**\*.*">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
 </Project>

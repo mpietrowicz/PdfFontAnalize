@@ -1,21 +1,55 @@
-﻿FROM mcr.microsoft.com/dotnet/runtime:10.0 AS base
-USER $APP_UID
-WORKDIR /app
-
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["AnalysisOfAspose/AnalysisOfAspose.csproj", "AnalysisOfAspose/"]
-RUN dotnet restore "AnalysisOfAspose/AnalysisOfAspose.csproj"
-COPY . .
-WORKDIR "/src/AnalysisOfAspose"
-RUN dotnet build "./AnalysisOfAspose.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./AnalysisOfAspose.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+# Własny NuGet.Config (bez fallbacków)
+RUN printf '%s\n' \
+'<?xml version="1.0" encoding="utf-8"?>' \
+'<configuration>' \
+'  <packageSources>' \
+'    <clear />' \
+'    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />' \
+'  </packageSources>' \
+'  <config>' \
+'    <add key="globalPackagesFolder" value="/root/.nuget/packages" />' \
+'  </config>' \
+'</configuration>' \
+> /src/NuGet.Config
 
-FROM base AS final
+COPY . ./
+
+# UWAGA: robimy publish z restore w tym samym kroku i NADPISUJEMY fallback
+RUN dotnet publish AnalysisOfAspose.csproj -c Release -o /out \
+    --configfile /src/NuGet.Config \
+    -p:RestoreFallbackFolders="" \
+    -p:RestoreNoCache=true \
+    --disable-parallel
+
+# ===== RUNTIME =====
+FROM mcr.microsoft.com/dotnet/runtime:10.0
 WORKDIR /app
-COPY --from=publish /app/publish .
+
+# Celowo NIE instalujemy fonts-*
+RUN apt-get update && apt-get install -y fontconfig && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+    fontconfig \
+    libfontconfig1 \
+    libfreetype6 \
+    libharfbuzz0b \
+    libjpeg-turbo8 \
+    libpng16-16 \
+    libgif7 \
+    libtiff6 \
+    libgl1 \
+    libx11-6 \
+    libxext6 \
+    libxrender1 \
+    && (apt-get install -y libwebp7 || apt-get install -y libwebp6 || apt-get install -y libwebp5) \
+    && rm -rf /var/lib/apt/lists/*
+
+
+
+
+RUN mkdir -p /data
+COPY --from=build /out ./
+
 ENTRYPOINT ["dotnet", "AnalysisOfAspose.dll"]
