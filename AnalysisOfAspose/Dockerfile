@@ -28,6 +28,15 @@ COPY . .
 WORKDIR "/src/AnalysisOfAspose"
 RUN dotnet build "./AnalysisOfAspose.csproj" -c $BUILD_CONFIGURATION -o /app/build --configfile /src/NuGet.Config
 WORKDIR "/src/AnalysisOfAspose.Tests"
+RUN apt-get update \
+    && apt-get install -y \
+        libfontconfig1 \
+        libfreetype6 \
+        libpng16-16 \
+        libexpat1 \
+        libuuid1 \
+        libssl3 \
+    && rm -rf /var/lib/apt/lists/*
 RUN dotnet test "./AnalysisOfAspose.Tests.csproj" -c $BUILD_CONFIGURATION --no-restore --verbosity normal
 
 WORKDIR "/src/AnalysisOfAspose"
