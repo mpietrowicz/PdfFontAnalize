@@ -18,3 +18,5 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build the Docker image AnalysisOfAspose
       run: docker build . --file AnalysisOfAspose/Dockerfile --tag analysis_of_aspose:$(date +%s)
+    - name: Run console application
+      run: docker run --rm analysis_of_aspose:latest
